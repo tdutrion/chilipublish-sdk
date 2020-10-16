@@ -1,0 +1,13 @@
+{
+    "name": "tdutrion/chilipublish-sdk",
+    "description": "PHP SDK for the chili publish rest api access.",
+    "type": "library",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Thomas Dutrion",
+            "email": "thomas@engineor.com"
+        }
+    ],
+    "require": {}
+}
