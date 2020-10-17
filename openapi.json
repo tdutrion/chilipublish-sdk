@@ -1,0 +1,80 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Chili Publish",
+    "description": "REST API to manage resources on a ChiliPublish server",
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about ChiliPublish APIs",
+    "url": "https://chilipublishdocs.atlassian.net/wiki/spaces/CPDOC/pages/1413560/REST+API+Endpoints"
+  },
+  "tags": [
+    {
+      "name": "System"
+    }
+  ],
+  "paths": {
+    "/system/apikey/{environmentNameOrURL}": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Generates an apiKey for subsequent calls to the other webservice functions.\n\nUse SetWorkingEnvironment to use your user account (if it is an administrator) to access different environments\n",
+        "operationId": "system/apikey",
+        "parameters": [
+          {
+            "name": "environmentNameOrURL",
+            "in": "path",
+            "description": "The identifier for the environment in which to log in\n\nThis can be:\n\n* the name of the environment\n* one of the values entered in the URLs setting of the environment\n* the full URL to the backoffice (eg: http://www.domain.com/CHILI/ENVIRONMENT_NAME/interface.aspx )\n",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Pet object that needs to be added to the store",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "example": "chiliUser",
+                    "description": "The user to log in with.\n\nThis user needs to exist in the specified environment.\n"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "myPassword",
+                    "description": "The user's password.\n\nThis can be provided as a MD5 encoded string (which of course is the preferred method)\n"
+                  }
+                },
+                "required": [
+                  "userName",
+                  "password"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {}
+          },
+          "404": {
+            "description": "Pet not found",
+            "content": {}
+          },
+          "405": {
+            "description": "Validation exception",
+            "content": {}
+          }
+        }
+      }
+    }
+  }
+}

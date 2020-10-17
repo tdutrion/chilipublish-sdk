@@ -9,5 +9,23 @@
             "email": "thomas@engineor.com"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Chilipublish\\Sdk\\Rest\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Chilipublish\\Tests\\Sdk\\Rest\\": "tests/"
+        }
+    },
+    "require": {
+        "psr/http-client": "^1.0",
+        "laminas/laminas-diactoros": "^2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.4",
+        "symfony/http-client": "^5.1",
+        "friendsofphp/php-cs-fixer": "^2.16"
+    }
 }
