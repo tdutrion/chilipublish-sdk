@@ -10,39 +10,26 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 
-class Client
+final class Client
 {
-    public const FETCH_RESPONSE = 'response';
-    public const FETCH_OBJECT = 'object';
-    protected $httpClient;
+    private $httpClient;
 
-    /**
-     * @var RequestFactoryInterface
-     */
-    protected $requestFactory;
+    private $requestFactory;
 
-    /**
-     * @var StreamFactoryInterface
-     */
-    protected $streamFactory;
+    private $streamFactory;
 
-    public function __construct(
-        ClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory
-    ) {
+    public function __construct(ClientInterface $httpClient, RequestFactoryInterface $requestFactory, StreamFactoryInterface $streamFactory) {
         $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory;
         $this->streamFactory = $streamFactory;
     }
 
-    public function executeEndpoint(Endpoint $endpoint, string $fetch = self::FETCH_OBJECT)
+    public function executeEndpoint(Endpoint $endpoint)
     {
         [$bodyHeaders, $body] = $endpoint->getBody($this->streamFactory);
         $queryString = $endpoint->getQueryString();
         $uriGlue = false === strpos($endpoint->getUri(), '?') ? '?' : '&';
         $uri = $queryString !== '' ? $endpoint->getUri().$uriGlue.$queryString : $endpoint->getUri();
-        $uri = 'https://cp-ynl-789.chili-publish.online/rest-api/v1/'.$uri;
         $request = $this->requestFactory->createRequest($endpoint->getMethod(), $uri);
 
         if ($body) {
@@ -69,7 +56,7 @@ class Client
             $request = $request->withHeader(AuthenticationRegistry::SCOPES_HEADER, $scopes);
         }
 
-        return $endpoint->parseResponse($this->httpClient->sendRequest($request), $fetch);
+        return $endpoint->parseResponse($this->httpClient->sendRequest($request));
     }
 
     public static function create($httpClient = null, array $additionalPlugins = array())

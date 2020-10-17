@@ -73,19 +73,4 @@ final class ApiKey implements Endpoint
     {
         return [['Content-Type' => ['application/json']], json_encode($this->body)];
     }
-    /**
-     * {@inheritdoc}
-     *
-     *
-     * @return null
-     */
-    protected function transformResponseBody(string $body, int $status, ?string $contentType = null)
-    {
-        if (400 === $status) {
-        }
-        if (404 === $status) {
-        }
-        if (405 === $status) {
-        }
-    }
 }

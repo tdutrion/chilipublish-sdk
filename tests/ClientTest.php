@@ -10,12 +10,40 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Psr18Client;
 
-class ClientTest extends TestCase
+final class ClientTest extends TestCase
 {
-    public function test()
+    private $config;
+
+    protected function setUp(): void
     {
-        $httpClient = HttpClient::create();
+        parent::setUp();
+        $this->config = require __DIR__.'/../config/credentials.php';
+    }
+
+    public function testGenerateValidToken(): void
+    {
+        $httpClient = HttpClient::create(['base_uri' => $this->config['valid']['base_uri']]);
         $client = Client::create(new Psr18Client($httpClient));
-        dd($client->executeEndpoint(new ApiKey()));
+
+        $result = $client->executeEndpoint(new ApiKey(
+            $this->config['valid']['environmentNameOrURL'],
+            $this->config['valid']['userName'],
+            $this->config['valid']['password']
+        ));
+
+        $this->assertIsString($result);
+    }
+
+    public function testRetrieveResources(): void
+    {
+        $httpClient = HttpClient::create(['base_uri' => $this->config['valid']['base_uri']]);
+        $client = Client::create(new Psr18Client($httpClient));
+        $apiKey = $client->executeEndpoint(new ApiKey(
+            $this->config['valid']['environmentNameOrURL'],
+            $this->config['valid']['userName'],
+            $this->config['valid']['password']
+        ));
+
+        $result = $client->executeEndpoint();
     }
 }
